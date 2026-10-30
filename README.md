@@ -58,7 +58,7 @@ Lo strumento misura in pixel e converte in mm, quindi deve conoscere la dimensio
 ```
 python -m pytest tests
 ```
-I test usano facciate sintetiche di misure note: una con la falda in vista e una a capanna su sfondo trasparente. Su entrambe le finestre risultano esatte al mm.
+I test usano facciate sintetiche di misure note: una con la falda in vista e una a capanna su sfondo trasparente. Su entrambe le finestre risultano esatte al mm; la porta a terra ha uno scarto di circa 4 mm in larghezza e 12 mm alla base, dovuto al bordo con lo sfondo.
 
 ## 2. Disegno manuale – `ortodis.lsp`
 
