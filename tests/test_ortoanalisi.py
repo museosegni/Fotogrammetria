@@ -81,3 +81,13 @@ def test_worldfile(tmp_path):
     g = georef_da_worldfile(str(wf), 1000.0)
     assert g.mm_px == pytest.approx(2.0)
     assert g.x0 == pytest.approx(100000.0) and g.y0 == pytest.approx(50002.0)
+
+
+def test_worldfile_ruotato_realityscan(tmp_path):
+    # world file reale di RealityScan (prospetto, rotazione ~90 gradi, pixel 1 mm)
+    wf = tmp_path / "b.tfw"
+    wf.write_text("0.0000104721\n-0.0009999495\n-0.0009999720\n-0.0000104723\n32.7324131649\n13.9048533789\n")
+    g = georef_da_worldfile(str(wf), 1000.0, altezza_px=14005)
+    assert g.mm_px == pytest.approx(1.0, abs=1e-4)
+    assert g.x0 == 0.0 and g.y0 == pytest.approx(14005 * g.mm_px)
+    assert "ruotato" in g.origine

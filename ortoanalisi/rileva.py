@@ -30,7 +30,7 @@ from .immagine import Georef
 @dataclass
 class Parametri:
     passo_mm: float = 1.0                 # arrotondamento coordinate finali
-    lato_max_proc_px: int = 6000          # riduzione immagine per l'analisi
+    lato_max_proc_px: int = 10000         # riduzione immagine per l'analisi
     tolleranza_sfondo: float = 12.0       # deltaE (Lab 8 bit) per sfondo uniforme
     finestra_min_mm: float = 350.0
     finestra_max_mm: float = 4000.0

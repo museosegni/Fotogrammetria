@@ -27,8 +27,8 @@ def main(argv=None):
                     help="quanto un'apertura deve essere piu' scura del muro (0-255, default 12)")
     ap.add_argument("--allinea", type=float, default=20.0,
                     help="allinea quote di aperture entro questa tolleranza mm (0 = disattiva)")
-    ap.add_argument("--risoluzione-max", type=int, default=6000,
-                    help="lato massimo (px) dell'immagine usata per l'analisi (default 6000)")
+    ap.add_argument("--risoluzione-max", type=int, default=10000,
+                    help="lato massimo (px) dell'immagine usata per l'analisi (default 10000)")
     ap.add_argument("--semplifica", type=float, default=30.0, help="tolleranza semplificazione contorni mm")
     ap.add_argument("--gronda-mm", type=float, help="forza il limite muro/copertura alla quota Y indicata (mm)")
     ap.add_argument("--soglie", choices=["auto", "rilevate", "nessuna"], default="auto",

@@ -1,6 +1,7 @@
 """Lettura dell'ortofoto e della sua scala/georeferenziazione."""
 from __future__ import annotations
 
+import math
 import os
 from dataclasses import dataclass
 
@@ -65,14 +66,22 @@ def trova_worldfile(percorso: str) -> str | None:
     return None
 
 
-def georef_da_worldfile(percorso_wf: str, fattore_mm: float) -> Georef:
+def georef_da_worldfile(percorso_wf: str, fattore_mm: float, altezza_px: int | None = None) -> Georef:
     with open(percorso_wf, encoding="utf-8", errors="ignore") as fh:
         v = [float(r.strip().replace(",", ".")) for r in fh if r.strip()][:6]
     a, d, b, e, c, f = v
-    if abs(b) > 1e-12 or abs(d) > 1e-12:
-        raise ValueError("World file con rotazione: non supportato (ruotare l'ortofoto sul piano di facciata).")
-    if abs(abs(a) - abs(e)) > 1e-6 * abs(a):
+    px_x, px_y = math.hypot(a, d), math.hypot(b, e)
+    if abs(px_x - px_y) > 1e-3 * px_x:
         raise ValueError("Pixel non quadrati nel world file: non supportato.")
+    if abs(b) > 1e-9 * px_x or abs(d) > 1e-9 * px_x:
+        # World file ruotato (tipico di RealityScan per i prospetti): le coordinate
+        # mondo non sono sul piano di facciata. Si usa solo la dimensione del pixel
+        # e si disegna in un sistema locale con origine in basso a sinistra.
+        mm = px_x * fattore_mm
+        rot = math.degrees(math.atan2(d, a))
+        return Georef(mm_px=mm, x0=0.0, y0=(altezza_px or 0) * mm,
+                      origine=f"world file {os.path.basename(percorso_wf)} ruotato di {rot:.2f} gradi: "
+                              f"usata solo la scala, origine locale in basso a sinistra")
     # c, f = centro del pixel in alto a sinistra
     return Georef(mm_px=abs(a) * fattore_mm,
                   x0=(c - a / 2.0) * fattore_mm,
@@ -114,7 +123,7 @@ def georef_automatica(percorso: str, altezza_px: int, mm_pixel: float | None,
                       origine="--mm-pixel (origine in basso a sinistra)")
     wf = trova_worldfile(percorso)
     if wf:
-        return georef_da_worldfile(wf, fattore)
+        return georef_da_worldfile(wf, fattore, altezza_px)
     g = georef_da_geotiff(percorso, fattore)
     if g:
         return g

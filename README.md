@@ -52,7 +52,7 @@ Lo strumento misura in pixel e converte in mm, quindi deve conoscere la dimensio
 ### Limiti
 - Il riconoscimento si basa su colore e contrasto, non è un modello di intelligenza artificiale addestrato. Funziona bene con aperture scure e copertura di colore diverso dal muro. Ombre forti, persiane chiuse dello stesso colore del muro, vegetazione o ponteggi possono creare errori. **Controlla sempre il PNG di controllo** e correggi in CAD, anche con `ortodis.lsp`.
 - La precisione è di circa ±1 pixel dell'ortofoto. Con 4 mm/px significa circa ±4 mm: il mm intero è un arrotondamento, non la precisione reale del rilievo.
-- L'ortofoto deve essere sul piano di facciata e non ruotata: i world file con rotazione non sono supportati.
+- World file ruotati (come quelli di RealityScan per i prospetti): si usa solo la dimensione del pixel e il disegno parte da 0,0 in basso a sinistra.
 
 ### Test
 ```
